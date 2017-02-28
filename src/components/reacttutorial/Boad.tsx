@@ -3,7 +3,7 @@ import {Square} from "./Square";
 
 export interface BoadProps extends React.Props<any> {
     squares: string[],
-    onClick:any,
+    onClick:(i:number) => void,
 }
 
 export class Boad extends React.Component<BoadProps, undefined>{
