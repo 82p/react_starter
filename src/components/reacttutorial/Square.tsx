@@ -2,7 +2,7 @@ import * as React from "react";
 import { Button } from 'react-bootstrap';
 
 export interface SquareProps extends React.Props<Square> {
-    value: string, onClick: () => void//どうすりゃいいんだ？ 
+    value: string, onClick: () => void
 };
 export class Square extends React.Component<SquareProps, undefined> {
     render() {
