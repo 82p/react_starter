@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Boad } from "./Boad";
 
-
 export interface BordState {
     squares: string[],
 }
@@ -9,42 +8,50 @@ export interface BordState {
 export interface GameState {
     history: BordState[],
     xIsNext: boolean,
-    stepNumber:number,
-}
-
-export interface history {
-    square: string[],
+    stepNumber: number,
 }
 
 export class Game extends React.Component<any, GameState>{
     constructor() {
         super();
+        this.reset();
+    }
+    private reset() {
         const nullarr: Array<string> = new Array(9);
-        this.state = {
-            history: [{ squares: nullarr }],
+        const start = {
             xIsNext: true,
-            stepNumber:0,
+            stepNumber: 0,
+            history: [{ squares: nullarr }],
+        }
+        if (this.state) {
+            this.setState(start);
+        } else {
+            this.state = start;
         }
     }
     handleClick(i: number) {
-        const history = this.state.history.slice(0,this.state.stepNumber);
-        const current = this.state.history[this.state.stepNumber];
+        const history = this.state.history.slice(0, this.state.stepNumber + 1);
+        const current = this.state.history[history.length - 1];
         const squares = current.squares.slice();
         const winner = calculateWinner(current.squares);
-        
+
         if (calculateWinner(current.squares) || current.squares[i]) {
             return;
         }
 
-        squares[i] = this.state.xIsNext ? 'x' : 'o';
+        squares[i] = this.state.xIsNext ? 'X' : 'O';
 
         this.setState({
-            history: history.concat([{ squares: squares }]),
             xIsNext: !this.state.xIsNext,
-            stepNumber:this.state.stepNumber + 1,
+            stepNumber: this.state.stepNumber + 1,
+            history: history.concat([{ squares: squares }]),
         });
     }
-    jumpTo(step: number) {
+    jumpTo(step: number): void {
+        if (step === 0) {
+            this.reset();
+            return;
+        }
         this.setState({
             stepNumber: step,
             xIsNext: (step % 2) ? false : true,
@@ -70,14 +77,29 @@ export class Game extends React.Component<any, GameState>{
                 </li>
             );
         })
-        return (
-            <div className="game">
-                <div className="game-board">
-                    <Boad squares={current.squares} onClick={(i: number) => this.handleClick(i)} />
+        const histories = history.map((bs, num) => {
+            return (
+                <div className="">
+                    {JSON.stringify(bs)}
                 </div>
-                <div className="game-info">
-                    <div>{status}</div>
-                    <ol>{moves}</ol>
+            )
+        })
+        const state = JSON.stringify(this.state, null, " ");
+        return (
+            <div>
+                <div className="game">
+                    <div className="game-board">
+                        <Boad squares={current.squares} onClick={(i: number) => this.handleClick(i)} />
+                    </div>
+                    <div className="game-info">
+                        <div>{status}</div>
+                        <ol>{moves}</ol>
+                    </div>
+                </div>
+                <div className="game-state">
+                    <pre>
+                        <code className="json">{state}</code>
+                    </pre>
                 </div>
             </div>
         );
