@@ -96,6 +96,7 @@ export class Game extends React.Component<any, GameState>{
                         <ol>{moves}</ol>
                     </div>
                 </div>
+                <h3>State</h3>
                 <div className="game-state">
                     <pre>
                         <code className="json">{state}</code>
