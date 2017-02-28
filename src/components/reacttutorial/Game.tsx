@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Boad } from "./Boad";
 
-
 export interface BordState {
     squares: string[],
 }
@@ -11,17 +10,26 @@ export interface GameState {
     xIsNext: boolean,
     stepNumber: number,
 }
-/**
- * Game class
- */
-export class Game extends React.Component<undefined, GameState>{
+
+export class Game extends React.Component<any, GameState>{
     constructor() {
         super();
         this.reset();
     }
-    /**funtion when square is clicked */
-    public handleClick(i: number): void {
-        // const history = this.state.history.slice(0,this.state.stepNumber);
+    private reset() {
+        const nullarr: Array<string> = new Array(9);
+        const start = {
+            xIsNext: true,
+            stepNumber: 0,
+            history: [{ squares: nullarr }],
+        }
+        if (this.state) {
+            this.setState(start);
+        } else {
+            this.state = start;
+        }
+    }
+    handleClick(i: number) {
         const history = this.state.history.slice(0, this.state.stepNumber + 1);
         const current = this.state.history[history.length - 1];
         const squares = current.squares.slice();
@@ -34,28 +42,19 @@ export class Game extends React.Component<undefined, GameState>{
         squares[i] = this.state.xIsNext ? 'X' : 'O';
 
         this.setState({
-            history: history.concat([{ squares: squares }]),
             xIsNext: !this.state.xIsNext,
             stepNumber: this.state.stepNumber + 1,
+            history: history.concat([{ squares: squares }]),
         });
     }
-    /**jump to history*/
-    public jumpTo(step: number): void {
+    jumpTo(step: number): void {
         if (step === 0) {
             this.reset();
+            return;
         }
         this.setState({
             stepNumber: step,
             xIsNext: (step % 2) ? false : true,
-        })
-    }
-    /**reset game */
-    private reset(): void {
-        const nullarr: Array<string> = new Array(9);
-        this.setState({
-            history: [{ squares: nullarr }],
-            xIsNext: true,
-            stepNumber: 0,
         })
     }
     render() {
@@ -78,14 +77,30 @@ export class Game extends React.Component<undefined, GameState>{
                 </li>
             );
         })
-        return (
-            <div className="game">
-                <div className="game-board">
-                    <Boad squares={current.squares} onClick={(i: number) => this.handleClick(i)} />
+        const histories = history.map((bs, num) => {
+            return (
+                <div className="">
+                    {JSON.stringify(bs)}
                 </div>
-                <div className="game-info">
-                    <div>{status}</div>
-                    <ol>{moves}</ol>
+            )
+        })
+        const state = JSON.stringify(this.state, null, " ");
+        return (
+            <div>
+                <div className="game">
+                    <div className="game-board">
+                        <Boad squares={current.squares} onClick={(i: number) => this.handleClick(i)} />
+                    </div>
+                    <div className="game-info">
+                        <div>{status}</div>
+                        <ol>{moves}</ol>
+                    </div>
+                </div>
+                <h3>State</h3>
+                <div className="game-state">
+                    <pre>
+                        <code className="json">{state}</code>
+                    </pre>
                 </div>
             </div>
         );
