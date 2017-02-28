@@ -9,45 +9,53 @@ export interface BordState {
 export interface GameState {
     history: BordState[],
     xIsNext: boolean,
-    stepNumber:number,
+    stepNumber: number,
 }
-
-export interface history {
-    square: string[],
-}
-
-export class Game extends React.Component<any, GameState>{
+/**
+ * Game class
+ */
+export class Game extends React.Component<undefined, GameState>{
     constructor() {
         super();
-        const nullarr: Array<string> = new Array(9);
-        this.state = {
-            history: [{ squares: nullarr }],
-            xIsNext: true,
-            stepNumber:0,
-        }
+        this.reset();
     }
-    handleClick(i: number) {
-        const history = this.state.history.slice(0,this.state.stepNumber);
-        const current = this.state.history[this.state.stepNumber];
+    /**funtion when square is clicked */
+    public handleClick(i: number): void {
+        // const history = this.state.history.slice(0,this.state.stepNumber);
+        const history = this.state.history.slice(0, this.state.stepNumber + 1);
+        const current = this.state.history[history.length - 1];
         const squares = current.squares.slice();
         const winner = calculateWinner(current.squares);
-        
+
         if (calculateWinner(current.squares) || current.squares[i]) {
             return;
         }
 
-        squares[i] = this.state.xIsNext ? 'x' : 'o';
+        squares[i] = this.state.xIsNext ? 'X' : 'O';
 
         this.setState({
             history: history.concat([{ squares: squares }]),
             xIsNext: !this.state.xIsNext,
-            stepNumber:this.state.stepNumber + 1,
+            stepNumber: this.state.stepNumber + 1,
         });
     }
-    jumpTo(step: number) {
+    /**jump to history*/
+    public jumpTo(step: number): void {
+        if (step === 0) {
+            this.reset();
+        }
         this.setState({
             stepNumber: step,
             xIsNext: (step % 2) ? false : true,
+        })
+    }
+    /**reset game */
+    private reset(): void {
+        const nullarr: Array<string> = new Array(9);
+        this.setState({
+            history: [{ squares: nullarr }],
+            xIsNext: true,
+            stepNumber: 0,
         })
     }
     render() {
@@ -58,7 +66,7 @@ export class Game extends React.Component<any, GameState>{
         if (winner) {
             status = 'Winner :' + winner;
         } else if (current.squares.filter((x) => x !== null).length === 9) {
-            status = "draw";
+            status = "Draw";
         } else {
             status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
         }
