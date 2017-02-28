@@ -1,11 +1,9 @@
 import * as React from "react";
 import { Button } from 'react-bootstrap';
 
-//Squareのプロパティ
 export interface SquareProps extends React.Props<Square> {
     value: string, onClick: () => void//どうすりゃいいんだ？ 
 };
-//
 export class Square extends React.Component<SquareProps, undefined> {
     render() {
         return (
