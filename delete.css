@@ -52,5 +52,7 @@ ol, ul {
   margin-left: 20px;
 }
 .game-state{
-  display:block;
+  height: 300px;
+  overflow: auto;
+  width:400px;
 }
