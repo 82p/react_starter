@@ -17,11 +17,10 @@ export class Game extends React.Component<any, GameState>{
         this.reset();
     }
     private reset() {
-        const nullarr: Array<string> = new Array(9);
         const start = {
             xIsNext: true,
             stepNumber: 0,
-            history: [{ squares: nullarr }],
+            history: [{ squares: new Array<string>(9) }],
         }
         if (this.state) {
             this.setState(start);
