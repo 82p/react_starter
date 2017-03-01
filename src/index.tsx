@@ -4,8 +4,8 @@ import * as ReactDOM from "react-dom";
 import { Helloworld } from "./components/Hello";
 
 ReactDOM.render(
-    //たぶんrenderするもの
+    //component to be rendered
     <Helloworld compiler="typescript" framework="react"/>,
-    //たぶんrenderする先
+    //where render to
     document.getElementById("first")
 )
