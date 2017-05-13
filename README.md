@@ -7,8 +7,8 @@ http://blog.morizotter.com/2016/01/12/react-tutorial-again-with-web-pack/
 # How to startup React with typescript
 
 ```
+npm install -g yarn webpack typescrypt
 yarn install
-npm install -g webpack typesctiprt
 ```
 *(Why I don't use yarn global?)* *
 
